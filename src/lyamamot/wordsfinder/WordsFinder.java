@@ -38,8 +38,7 @@ public class WordsFinder {
 			return;
 		}
 		
-		long start = System.currentTimeMillis();
-		String letters = args.length >= 2 ? args[1] : "yadefemsbupl";
+		String letters = args.length >= 2 ? args[1] : "yadefemsbuplxfewqase";
 		Map<Integer, BonusTile> bonuses = Collections.singletonMap(6, BonusTile.tripleLetter);
 		
 		LongestWordEvaluator longestWordEvaluator = new LongestWordEvaluator();
@@ -54,6 +53,7 @@ public class WordsFinder {
 		evals.add(longestHighestScoringWordsEvaluator);
 		
 		WordsFinder h = new WordsFinder(args[0], evals);
+		long start = System.currentTimeMillis();
 		h.findWord(letters);
 		System.out.println("Elapsed time: " + (System.currentTimeMillis() - start) + " ms.");
 		
@@ -79,6 +79,13 @@ public class WordsFinder {
 		}
 	}
 	
+	/**
+	 * Recursively finds candidate words from the given letters, maintaining the current partial word during our evaluation.
+	 * 
+	 * @param letters available letters for forming the rest of the word
+	 * @param prefix partial word prefix we have discovered so far
+	 */
+	@SuppressWarnings("unused")
 	private void findWord(char[] letters, String prefix) {
 		if (prefix.length() >= MAX_WORD_LENGTH) {
 			return;
@@ -104,14 +111,22 @@ public class WordsFinder {
 		}
 	}
 
-	@SuppressWarnings("unused")
+	/**
+	 * Recursively finds candidate words from the given letters, maintaining the current partial word and trie during our evaluation.
+	 * 
+	 * This implementation is more efficient than {@link #findWord(char[], String)} since it does not repeat the work of determining whether the trie
+	 * contains the prefix part of the word, nor does it need to test whether a prefix is valid since we are sure that it is.
+	 * 
+	 * @param letters available letters for forming the rest of the word
+	 * @param prefix partial word prefix we have discovered so far
+	 * @param trie remaining trie to evaluate
+	 */
 	private void findWord(char[] letters, String prefix, PartialTrie trie) {
 		if (prefix.length() >= MAX_WORD_LENGTH) {
 			return;
 		}
 		
-		for (int i = 0; i < letters.length; i++) {
-			
+		for (int i = 0; i < letters.length; i++) {	
 			PartialTrie partialTrie = trie.getChild(letters[i]);
 			if (null == partialTrie) {
 				continue;
@@ -133,11 +148,17 @@ public class WordsFinder {
 		}
 	}
 	
+	/**
+	 * Finds words from the stored word list using the given letters.
+	 * 
+	 * @param letters string containing letters to use in forming words
+	 */
 	public void findWord(String letters) {
 		if (null == letters) {
 			return;
 		}
 		
-		findWord(letters.toCharArray(), "");
+		//findWord(letters.toCharArray(), "");
+		findWord(letters.toCharArray(), "", (PartialTrie)_trie);
 	}
 }

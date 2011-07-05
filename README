@@ -1,0 +1,3 @@
+Evaluate words from a word list and find those that match user-specified criteria.
+
+This program loads a given word list (passed as the first argument) and stores it in a trie. It then uses a set of candidate letters (second argument) and an optional list of bonus tiles (currently only editable in the source) to determine lists of words that match certain evaluation criteria. Typically, the criteria are centered around longest word lengths or highest scoring words.

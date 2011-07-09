@@ -36,7 +36,7 @@ public class HighestScoringWordsEvaluator extends HighestScoringWordEvaluator im
 	public HighestScoringWordsEvaluator(int[] scores, Map<Integer, BonusTile> bonuses) {
 		super(scores, bonuses);
 
-		_wordListLength = 6;
+		_wordListLength = 8;
 	}
 	
 	/* (non-Javadoc)
@@ -45,10 +45,6 @@ public class HighestScoringWordsEvaluator extends HighestScoringWordEvaluator im
 	@Override
 	public void evaluate(String word) {
 		int currentScore = score(word);
-
-		if (_scoresToWords.size() >= _wordListLength && currentScore > _scoresToWords.lastKey()) {
-			_scoresToWords.remove(_scoresToWords.lastKey());
-		}
 
 		SortedSet<String> words;
 		if (_scoresToWords.containsKey(currentScore)) {
@@ -72,8 +68,20 @@ public class HighestScoringWordsEvaluator extends HighestScoringWordEvaluator im
 			});
 		}
 		
-		words.add(word);
-		_scoresToWords.put(currentScore, words);
+		boolean addWord = false;
+		if (_scoresToWords.size() < _wordListLength) {
+			addWord = true;
+		} else if (currentScore > _scoresToWords.lastKey()) {
+			if (!_scoresToWords.containsKey(currentScore)) {
+				_scoresToWords.remove(_scoresToWords.lastKey());
+			}
+			addWord = true;
+		}
+		
+		if (addWord) {
+			words.add(word);
+			_scoresToWords.put(currentScore, words);
+		}
 	}
 	
 	public String getWord() {

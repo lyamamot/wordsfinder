@@ -1,3 +1,5 @@
 Evaluate words from a word list and find those that match user-specified criteria.
 
-This program loads a given word list (passed as the first argument) and stores it in a trie. It then uses a set of candidate letters (second argument) and an optional list of bonus tiles (currently only editable in the source) to determine lists of words that match certain evaluation criteria. Typically, the criteria are centered around longest word lengths or highest scoring words.
+This program loads a given word list (passed as the first argument) and uses a set of candidate letters (second argument) and an optional list of bonus tiles (currently only editable in the source) to determine lists of words that match certain evaluation criteria. Typically, the criteria are centered around longest word lengths or highest scoring words. This can be useful for Scrabble, Words With Friends, Hanging With Friends, or any other game where you have a pool of letters and you are attempting to find the words that most satisfy some condition.
+
+Underneath the hood, the program stores the word list in a trie for fast prefix matching and testing of whether a candidate is actually a word.

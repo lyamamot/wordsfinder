@@ -13,6 +13,27 @@ import java.util.TreeSet;
 
 /** Stores the words with the highest scores encountered. */
 public class HighestScoringWordsEvaluator extends HighestScoringWordEvaluator implements WordEvaluator {
+	/**
+	 * Comparator for two strings that sorts longest word to shortest word, then by the natural order for the same length word.
+	 * @author lyamamot
+	 */
+	private static final class DescendingLengthComparator implements Comparator<String> {
+		@Override
+		public int compare(String o1, String o2) {
+			if (o1.length() == o2.length()) {
+				return o1.compareTo(o2);
+			}
+			
+			if (o1.length() > o2.length()) {
+				return -1;
+			} else if (o1.length() < o2.length()) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	}
+
 	/** Map of a word score to a set of words, ordered from highest score to lowest score. */
 	private TreeMap<Integer, SortedSet<String>> _scoresToWords = new TreeMap<Integer, SortedSet<String>>(new Comparator<Integer>() {
 		@Override
@@ -50,22 +71,7 @@ public class HighestScoringWordsEvaluator extends HighestScoringWordEvaluator im
 		if (_scoresToWords.containsKey(currentScore)) {
 			words = _scoresToWords.get(currentScore);
 		} else {
-			words = new TreeSet<String>(new Comparator<String>() {
-				@Override
-				public int compare(String o1, String o2) {
-					if (o1.length() != o2.length()) {
-						if (o1.length() > o2.length()) {
-							return -1;
-						} else if (o1.length() < o2.length()) {
-							return 1;
-						} else {
-							return 0;
-						}
-					} else {
-						return o1.compareTo(o2);
-					}
-				}
-			});
+			words = new TreeSet<String>(new DescendingLengthComparator());
 		}
 		
 		boolean addWord = false;

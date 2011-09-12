@@ -38,19 +38,21 @@ public class WordsFinder {
 			return;
 		}
 		
-		String letters = args.length >= 2 ? args[1] : "yadefemsbuplxfewqase";
-		Map<Integer, BonusTile> bonuses = Collections.singletonMap(6, BonusTile.tripleLetter);
+		String letters = args.length >= 2 ? args[1] : "brrhirhodyoe";
+		Map<Integer, BonusTile> bonuses = Collections.singletonMap(1, BonusTile.tripleWord);
 		
 		LongestWordEvaluator longestWordEvaluator = new LongestWordEvaluator();
 		HighestScoringWordEvaluator highestScoringWordEvaluator = new HighestScoringWordEvaluator(bonuses);
 		HighestScoringWordsEvaluator highestScoringWordsEvaluator = new HighestScoringWordsEvaluator(bonuses);
 		LongestHighestScoringWordsEvaluator longestHighestScoringWordsEvaluator = new LongestHighestScoringWordsEvaluator(bonuses);
+		ShortestHighestScoringWordsEvaluator shortestHighestScoringWordsEvaluator = new ShortestHighestScoringWordsEvaluator(bonuses);
 		
 		List<WordEvaluator> evals = new ArrayList<WordEvaluator>();
 		evals.add(longestWordEvaluator);
 		evals.add(highestScoringWordEvaluator);
 		evals.add(highestScoringWordsEvaluator);
 		evals.add(longestHighestScoringWordsEvaluator);
+		evals.add(shortestHighestScoringWordsEvaluator);
 		
 		WordsFinder h = new WordsFinder(args[0], evals);
 		long start = System.currentTimeMillis();
@@ -61,6 +63,7 @@ public class WordsFinder {
 		System.out.println("Highest scoring word: " + highestScoringWordEvaluator.getWord() + ", " + highestScoringWordEvaluator.getScore() + " points");
 		System.out.println("Highest scoring words: " + highestScoringWordsEvaluator.getWords());
 		System.out.println("Longest, highest scoring words: " + longestHighestScoringWordsEvaluator.getWords());
+		System.out.println("Shortest, highest scoring words: " + shortestHighestScoringWordsEvaluator.getWords());
 	}
 	
 	public WordsFinder(String wordsFile, List<WordEvaluator> evaluators) throws IOException {

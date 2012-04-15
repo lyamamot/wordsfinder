@@ -13,11 +13,15 @@ public class HighestScoringWordEvaluator extends ScoringEvaluator implements Wor
 	private int _wordScore = Integer.MIN_VALUE;
 	
 	public HighestScoringWordEvaluator() {
-		this(null);
+		this(WORDS_WITH_FRIENDS_POINTS);
 	}
 	
 	public HighestScoringWordEvaluator(Map<Integer, BonusTile> bonuses) {
 		this(WORDS_WITH_FRIENDS_POINTS, bonuses);
+	}
+	
+	public HighestScoringWordEvaluator(int[] scores) {
+		super(scores);
 	}
 	
 	public HighestScoringWordEvaluator(int[] scores, Map<Integer, BonusTile> bonuses) {

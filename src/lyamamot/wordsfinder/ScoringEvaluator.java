@@ -4,6 +4,7 @@
  */
 package lyamamot.wordsfinder;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,6 +15,9 @@ import java.util.Set;
  * @author lyamamot
  */
 public abstract class ScoringEvaluator implements WordEvaluator {
+	/** Empty bonus tile map. */
+	private static final Map<Integer, BonusTile> EMPTY = Collections.emptyMap();
+	
 	/** Enum representing the possible bonus tile types, used for scoring. */
 	public static enum BonusTile {
 		doubleLetter, tripleLetter, doubleWord, tripleWord;
@@ -37,11 +41,24 @@ public abstract class ScoringEvaluator implements WordEvaluator {
 			2, 5, 4, 8, 3, 10
 		};
 	
+	/** Letter point values for Quarrel. */
+	protected static final int[] QUARREL_POINTS = new int[] {
+			1, 5, 2, 3, 1,		// a - e
+			5, 4, 4, 1, 15,		// f - j
+			6, 2, 4, 1, 1,		// k - o
+			3, 15, 2, 1, 1,		// p - t
+			3, 6, 5, 10, 5, 10	// u - z
+		};
+	
 	/** Map of character to letter point value. */
 	protected Map<Character, Integer> _letterToPoint = new HashMap<Character, Integer>();
 	
 	/** Map of letter index to bonus tile type. */
 	protected Map<Integer, BonusTile> _bonuses = new HashMap<Integer, BonusTile>();
+	
+	public ScoringEvaluator(int[] scores) {
+		this(WORDS_WITH_FRIENDS_POINTS, EMPTY);
+	}
 	
 	public ScoringEvaluator(Map<Integer, BonusTile> bonuses) {
 		this(WORDS_WITH_FRIENDS_POINTS, bonuses);

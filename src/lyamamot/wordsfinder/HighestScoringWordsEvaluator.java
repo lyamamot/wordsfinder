@@ -7,33 +7,13 @@ package lyamamot.wordsfinder;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 /** Stores the words with the highest scores encountered. */
 public class HighestScoringWordsEvaluator extends HighestScoringWordEvaluator implements WordEvaluator {
-	/**
-	 * Comparator for two strings that sorts longest word to shortest word, then by the natural order for the same length word.
-	 * @author lyamamot
-	 */
-	private static final class DescendingLengthComparator implements Comparator<String> {
-		@Override
-		public int compare(String o1, String o2) {
-			if (o1.length() == o2.length()) {
-				return o1.compareTo(o2);
-			}
-			
-			if (o1.length() > o2.length()) {
-				return -1;
-			} else if (o1.length() < o2.length()) {
-				return 1;
-			} else {
-				return 0;
-			}
-		}
-	}
-
 	/** Map of a word score to a set of words, ordered from highest score to lowest score. */
 	private TreeMap<Integer, SortedSet<String>> _scoresToWords = new TreeMap<Integer, SortedSet<String>>(new Comparator<Integer>() {
 		@Override
@@ -47,11 +27,15 @@ public class HighestScoringWordsEvaluator extends HighestScoringWordEvaluator im
 	
 	/** Create evaluator with default letter scores and no bonus tiles. */
 	public HighestScoringWordsEvaluator() {
-		this(null);
+		this(WORDS_WITH_FRIENDS_POINTS);
 	}
 	
 	public HighestScoringWordsEvaluator(Map<Integer, BonusTile> bonuses) {
 		this(WORDS_WITH_FRIENDS_POINTS, bonuses);
+	}
+	
+	public HighestScoringWordsEvaluator(int[] scores) {
+		this(scores, null);
 	}
 	
 	public HighestScoringWordsEvaluator(int[] scores, Map<Integer, BonusTile> bonuses) {
@@ -90,15 +74,22 @@ public class HighestScoringWordsEvaluator extends HighestScoringWordEvaluator im
 		}
 	}
 	
+	@Override
 	public String getWord() {
 		return _scoresToWords.firstEntry().getValue().first();
 	}
 	
+	@Override
 	public int getScore() {
 		return _scoresToWords.firstKey();
 	}
 	
-	public Map<Integer, SortedSet<String>> getWords() {
-		return Collections.unmodifiableMap(_scoresToWords);
+	/**
+	 * Returns the list of words, keyed by score, returned in descending order. The word lists themselves are stored in descending length and natural order.
+	 * 
+	 * @return word list
+	 */
+	public SortedMap<Integer, SortedSet<String>> getWords() {
+		return Collections.unmodifiableSortedMap(_scoresToWords);
 	}
 }

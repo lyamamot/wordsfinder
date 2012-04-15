@@ -12,7 +12,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * Stores the words with the longest, highest scoring words encountered.
+ * Stores the words with the shortest, highest scoring words encountered.
  * @author lyamamot
  */
 public class ShortestHighestScoringWordsEvaluator extends ScoringEvaluator implements WordEvaluator {
@@ -26,6 +26,10 @@ public class ShortestHighestScoringWordsEvaluator extends ScoringEvaluator imple
 	
 	public ShortestHighestScoringWordsEvaluator(Map<Integer, BonusTile> bonuses) {
 		this(WORDS_WITH_FRIENDS_POINTS, bonuses);
+	}
+	
+	public ShortestHighestScoringWordsEvaluator(int[] scores) {
+		super(scores);
 	}
 	
 	public ShortestHighestScoringWordsEvaluator(int[] scores, Map<Integer, BonusTile> bonuses) {

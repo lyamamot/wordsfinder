@@ -23,7 +23,8 @@ public class WordsSolver {
 	private static List<String> words = new LinkedList<String>();
 	
 	private void index(String s) {
-		char[] letters = s.toCharArray();
+		String uniqueLetters = s.replaceAll("(.)(?=.*?\\1)", "");
+		char[] letters = uniqueLetters.toCharArray();
 		for (char c : letters) {
 			letterFrequencies[c - 'a']++;
 			
@@ -43,7 +44,13 @@ public class WordsSolver {
 		// Surround each group of "@" and "#" signs with grouping parentheses.
 		pattern = pattern.replaceAll("(@+|#+)", "\\($1\\)");
 		// Assemble the final pattern. The pattern represents a single word, so surround with ^$. Each "@" sign represents all possible remaining letters.
-		pattern = "^" + pattern.replace("@", "[^" + guessedLetters + notLetters + "]").replace("#", "[^aeiou" + guessedLetters + notLetters + "]") + "$";
+		String lettersAndVowelsPattern = "[^" + guessedLetters + notLetters + "]";
+		String lettersPattern = "[^aeiou" + guessedLetters + notLetters + "]";
+		if ((guessedLetters + notLetters).isEmpty()) {
+			lettersAndVowelsPattern = ".";
+			lettersPattern = "[^aeiou]";
+		}
+		pattern = "^" + pattern.replace("@", lettersAndVowelsPattern).replace("#", lettersPattern) + "$";
 
 		Pattern p = Pattern.compile(pattern);
 		
@@ -91,7 +98,8 @@ public class WordsSolver {
 		}
 		
 		// For debug purposes only:
-		pattern = "@@a##";
+		//pattern = "@@a##";
+		pattern = "@@@@@";
 		notLetters = "";
 		// End debug.
 		

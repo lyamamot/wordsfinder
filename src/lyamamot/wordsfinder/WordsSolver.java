@@ -71,7 +71,8 @@ public class WordsSolver {
 		
 		System.out.println("Most frequent letter: " + mostFrequentLetter);
 		for (char c = 'a'; c <= 'z'; c++) {
-			System.out.println(c + ": " + (int)letterFrequencies[c - 'a']);
+			int count = (int)letterFrequencies[c - 'a'];
+			System.out.println(c + ": " + (count == 0 ? '-' : Integer.toString(count)));
 		}
 		System.out.println("Words: " + words);
 	}
